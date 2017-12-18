@@ -1,5 +1,5 @@
 import init from './main.jsx'
-import '../node_modules/draft-js/dist/Draft.css'
+import 'draft-js/dist/Draft.css'
 
 import { mock_saveFile, mock_saveFileList, mock_loadFile, mock_loadFileList } from './store.js'
 
