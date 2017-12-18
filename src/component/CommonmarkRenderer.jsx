@@ -28,4 +28,5 @@ export default class CommonmarkRenderer extends React.PureComponent {
 CommonmarkRenderer.styles = {
     background: '#f0f0f0',
     padding: '1em',
+    overflowY: 'auto',
 }

@@ -46,4 +46,5 @@ export default class PlainTextEditor extends React.Component {
 PlainTextEditor.styles = {
     cursor: 'text',
     padding: '1em',
+    overflowY: 'auto',
 }

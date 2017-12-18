@@ -36,6 +36,8 @@ export default class CommonmarkEditor extends React.Component {
 
 CommonmarkEditor.styles = {
     root: {
+        fontFamily: 'Arial, Helvetica, sans-serif',
+        fontSize: '16px',
         position: 'absolute',
         display: 'flex',
         flexFlow: 'row nowarp',
