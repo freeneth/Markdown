@@ -3,7 +3,7 @@ const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge');
 const common = require('./webpack.common.babel.js');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+//const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = merge(common, {
     entry: {
@@ -12,14 +12,14 @@ module.exports = merge(common, {
     output: {
         path: __dirname,
         filename: '[name].js',
-        library: 'MindMap',
+        library: 'CommonmarkEditor',
         libraryTarget: 'umd',
     },
     plugins: [
-        new UglifyJSPlugin({
-            parallel: true,
-            sourceMap: true,
-        }),
+        // new UglifyJSPlugin({
+        //     parallel: true,
+        //     sourceMap: true,
+        // }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production'),
         }),
