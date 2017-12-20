@@ -39,7 +39,6 @@ export default class PlainTextEditor extends React.Component {
                 />
             </div>
         )
-
     }
 }
 

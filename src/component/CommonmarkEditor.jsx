@@ -14,10 +14,28 @@ export default class CommonmarkEditor extends React.Component {
     }
 
     onChange(editorState) {
-        this.setState({editorState})
+        const text = editorState.getCurrentContent().getPlainText()
+        console.log(text)
+        this.setState({ editorState })
+        const { FileIOCmd, FileCmd } = this.props
+        if(text && text !=''){
+
+            FileCmd.setContent('fileid', text)
+            FileIOCmd.push('fileid') 
+        }
+        /* const FileCmd = this.props.FileCmd
+        
+        */
+    }
+
+    componentDidMount() {
+        const { FileIOCmd, FileCmd } = this.props
+        FileCmd.createFile()
+        FileIOCmd.push('fileid')
     }
 
     render() {
+        const { FileIOCmd, FileCmd } = this.props
         const styles = CommonmarkEditor.styles
         const markdown = this.state.editorState.getCurrentContent().getPlainText()
         return (<div style={styles.root}>
@@ -25,6 +43,7 @@ export default class CommonmarkEditor extends React.Component {
                 state={this.state.editorState} 
                 onChange={this.onChange.bind(this)}
                 styles={styles.editor}
+                FileIOCmd={FileIOCmd}
             />
             <CommonmarkRenderer
                 markdown={markdown}

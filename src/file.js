@@ -5,7 +5,7 @@ import {takeLatest, put, call, select} from 'redux-saga/effects'
 
 const CREATE = 'FILE/CREATE'
 const REMOVE = 'FILE/REMOVE'
-const SET_CONTENT = 'FILE/REMOVE'
+const SET_CONTENT = 'FILE/CONTENT'
 
 const PULL = 'FILE/PULL'
 const PUSH = 'FILE/PUSH'
@@ -63,12 +63,14 @@ export const actions = {
         info,
     }),
     cmd: {
-        pull: (loader)=>({
+        pull: (id, loader)=>({
             type: PULL,
+            id,
             loader,
         }),
-        push: (saver)=>({
+        push: (id, saver)=>({
             type: PUSH,
+            id,
             saver,
         }),
     },

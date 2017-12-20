@@ -45,7 +45,7 @@ const Action = {
 }
 
 const Reducer = combineReducers({
-    treeMap: File.reducer,
+    file: File.reducer,
 })
 
 function* Saga() {
