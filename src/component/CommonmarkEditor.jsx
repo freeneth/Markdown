@@ -15,42 +15,72 @@ export default class CommonmarkEditor extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            editorState: EditorState.createEmpty(),
-            fileListState: FileListState.createEmpty(),
+            fileListState: FileListState.createEmpty()
+        }
+    }
+
+    checkSave() {
+        if (this.editorSyncingIdx < 0 ) {
+            this.editorSyncingIdx = this.editorSyncQueue.length - 1
+            // TODO: implement save
+            this.props.externalCmds.save(this.editorSyncQueue[this.editorSyncingIdx]).then(() => {
+                this.editorSyncQueue = this.editorSyncQueue.slice(this.editorSyncingIdx)
+                this.editorSyncingError = false
+                this.editorSyncingIdx = -1
+            }).catch((e) => {
+                console.error(e)
+                this.editorSyncingError = true
+                this.editorSyncingIdx = -1
+            })
         }
     }
 
     onChange(editorState) {
-        const text = editorState.getCurrentContent().getPlainText()
-        console.log(text)
-        this.setState({ editorState })
-        const { FileIOCmd, FileCmd } = this.props
-        if(text && text !=''){
-
-            FileCmd.setContent('fileid', text)
-            FileIOCmd.push('fileid') 
-        }
-        /* const FileCmd = this.props.FileCmd
-        
-        */
+        const { updateEditor} = this.props
+        updateEditor(editorState)
     }
 
     componentDidMount() {
-        const { FileIOCmd, FileCmd } = this.props
+        //console.log('componentDidMount')
+        /* const { FileIOCmd, FileCmd } = this.props
         FileCmd.createFile()
-        FileIOCmd.push('fileid')
+        FileIOCmd.push('fileid') */
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { FileIOCmd } = this.props
+        const fileid = 'testid'
+        const oldText = this.props.file.editor.getCurrentContent().getPlainText()
+        const newText = nextProps.file.editor.getCurrentContent().getPlainText()
+        console.log(oldText, newText)
+        if (oldText != newText) {
+            FileIOCmd.push(fileid)
+        }
+        //console.log('componentWillReceiveProps')
+    }
+
+    componentWillUpdate(nextProps, nextState){
+
+        /* const selectedFile = this.state.fileListState.selectedFile
+        const nextSelectedFile = nextState.fileListState.selectedFile
+        if (selectedFile !== nextSelectedFile){
+            console.log('componentWillUpdate not...')
+            const { FileIOCmd, FileCmd } = this.props
+            FileCmd.createFile()
+            FileIOCmd.pull(nextSelectedFile)
+        } */
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        //console.log('componentDidUpdate')
     }
 
     render() {
-        const { FileIOCmd, FileCmd } = this.props
+        const { file, file: { syncingIdx}} = this.props
+        console.log('editorSyncingIdx', syncingIdx)
         const styles = CommonmarkEditor.styles
-        const markdown = this.state.editorState.getCurrentContent().getPlainText()
-        const fileid = this.state.fileListState.selectedFile
-        if (fileid) {
-            const file = this.state.fileListState.files.find((f) => f.id === fileid)
-            console.log(file.title)
-        }
-    
+        const markdown = file.editor.getCurrentContent().getPlainText()
+
         return (<div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
             <VLayout styles={{ height: '100%' }}>
                 <Sidebar>
@@ -60,13 +90,12 @@ export default class CommonmarkEditor extends React.Component {
                     />
                 </Sidebar>
                 <HLayout styles={{flexGrow: 2}}>
-                    <Toolbar />
+                    <Toolbar syncing={syncingIdx >= 0}/>
                     <VLayout styles={CommonmarkEditor.styles.content}>
                         <PlainTextEditor
-                            state={this.state.editorState}
+                            state={file.editor}
                             onChange={this.onChange.bind(this)}
                             styles={styles.editor}
-                            FileIOCmd={FileIOCmd}
                         />
                         <CommonmarkRenderer
                             markdown={markdown}
@@ -75,19 +104,7 @@ export default class CommonmarkEditor extends React.Component {
                     </VLayout>
                 </HLayout>
             </VLayout>
-            
         </div>)
-        /*  return (
-            <div style={{position: 'absolute',top: 0, left: 0, right: 0, bottom: 0, borderStyle: 'solid'}}>
-                <VLayout styles={{height: '100%'}}>
-                    <div style={{flexGrow: 1, borderStyle: 'solid'}}> 1 </div>
-                    <HLayout styles={{ flexGrow: 2 }}>
-                        <div style={{ flexGrow: 1, borderStyle: 'solid' }}> 2 </div>
-                        <div style={{ flexGrow: 1, borderStyle: 'solid' }}> 3 </div>
-                    </HLayout>
-                </VLayout>
-            </div>
-        ) */
     }
 }
 

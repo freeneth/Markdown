@@ -4,10 +4,16 @@ import React from 'react'
 import { PureComponent } from 'react'
 
 export default class Toolbar extends PureComponent {
+    constructor(props){
+        super(props)
+    }
     render() {
-        //const {syncing} = this.this.props
+        const {syncing} = this.props
+        const syncingText = syncing ? '同步中...': '准备就绪'
         return (
-            <div style={Toolbar.styles.bar}></div>
+            <div style={Toolbar.styles.bar}>
+                {syncingText}
+            </div>
         )
     }
 }

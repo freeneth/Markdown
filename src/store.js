@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux'
 import File from './file.js'
+import FileList from './fileList.js'
 export function mock_saveFile(id, json){
     return new Promise((res)=>{
         if (id) {
@@ -42,10 +43,12 @@ export function mock_loadFileList() {
 
 const Action = {
     file: File.actions,
+    fileList: FileList.actions,
 }
 
 const Reducer = combineReducers({
     file: File.reducer,
+    fileList: FileList.reducer,
 })
 
 function* Saga() {

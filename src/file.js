@@ -1,15 +1,14 @@
 import Immutable from 'immutable'
 
+import { EditorState } from 'draft-js'
 import {createReducers} from './redux_helper.js'
-import {takeLatest, put, call, select} from 'redux-saga/effects'
-
-const CREATE = 'FILE/CREATE'
-const REMOVE = 'FILE/REMOVE'
-const SET_CONTENT = 'FILE/CONTENT'
+import {takeEvery, put, call, select} from 'redux-saga/effects'
 
 const PULL = 'FILE/PULL'
 const PUSH = 'FILE/PUSH'
 
+const UPDATE_SYNCING_IDX = 'FILE/UPDATE_SYNCING_IDX'
+const UPDATE_EDITOR = 'FILE/UPDATE_EDITOR'
 const PULL_REQ = 'FILE/PULL_REQ'
 const PULL_OK = 'FILE/PULL_OK'
 const PULL_ERR = 'FILE/PULL_ERR'
@@ -18,45 +17,41 @@ const PUSH_OK = 'FILE/PUSH_OK'
 const PUSH_ERR = 'FILE/PUSH_ERR'
 
 export function defaultValue() {
-    return Immutable.fromJS({
-        files: {},
-        syncing: false,
-        pushing: null,
-    })
+    return {
+        syncingQ: [],
+        syncingIdx: -1,
+        syncingErr: false,
+        editor: EditorState.createEmpty(),
+    }
 }
 
 export const actions = {
-    create: (id)=>({
-        type: CREATE,
-        id,
+    updateEditor: (editor)=>({
+        type: UPDATE_EDITOR,
+        editor,
     }),
-    remove: (id)=>({
-        type: REMOVE,
-        id,
-    }),
-    setContent: (id, content)=>({
-        type: SET_CONTENT,
-        id,
-        content,
+    updateSyncingId: (syncingIdx)=>({
+        type: UPDATE_SYNCING_IDX,
+        syncingIdx,
     }),
     pull_req: ()=>({
         type: PULL_REQ,
     }),
-    pull_ok: (id, json)=>({
+    pull_ok: (json)=>({
         type: PULL_OK,
-        id,
         json,
     }),
     pull_err: (info)=>({
         type: PULL_ERR,
         info,
     }),
-    push_req: (json)=>({
+    push_req: (text)=>({
         type: PUSH_REQ,
-        json,
+        text,
     }),
-    push_ok: ()=>({
+    push_ok: (syncingIdx)=>({
         type: PUSH_OK,
+        syncingIdx,
     }),
     push_err: (info)=>({
         type: PUSH_ERR,
@@ -76,94 +71,108 @@ export const actions = {
     },
 }
 
-function create(files, {id}) {
-    const newFile = Immutable.fromJS({ id: id, content: '', ctime: Date.now(), mtime: Date.now() })
-    return files.set(id, newFile)
+function update_editor(old, {editor}) {
+    return Object.assign({},old,{editor})
 }
 
-function remove(files, {id}) {
-    return files.delete(id)
-}
-
-function setContent(files, {id, content}) {
-    return files.update(id, (f)=>{
-        return f.set('content', content)
-            .set('mtime', Date.now())
-    })
+function update_syncingIdx(old, {syncingIdx}) {
+    return Object.assign({}, old, {syncingIdx})
 }
 
 function pull_req(old) {
     return old.set('syncing', true)
 }
 
-function pull_ok(old, {id, json}) {
-    const obj = parseV1(json)
-    return old.update('files', (f)=>{
-        return f.set(id, obj)
-    }).set('syncing', false)
+function pull_ok(old, {json}) {
+    const text = parseV1(json)
+    const state = Object.assign({}, old.editor.getCurrentContent().createFromText(text))
+    return state
 }
 
 function pull_err(old, {info}) {
     console.error(info)
-    return old.set('syncing', false)
+    return old;
 }
 
-function push_req(old, {json}) {
-    return old.set('syncing', true).set('pushing', json)
+function push_req(old, {text}) {
+    let state = Object.assign({}, old)
+    state.syncingQ.push(text)
+    return state
 }
 
-function push_ok(old) {
-    return old.set('syncing', false).set('pushing', null)
+function push_ok(old, { syncingIdx}) {
+    console.assert(syncingIdx >= 0)
+    const state = Object.assign({}, old)
+    state.syncingQ = state.syncingQ.slice(syncingIdx+1)
+    state.syncingErr = false
+    state.syncingIdx = -1
+    return state
 }
 
 function push_err(old, {info}) {
     console.error(info)
-    return old.set('syncing', false)
+    const state = Object.assign({}, old)
+    state.syncingErr = true
+    state.syncingIdx = -1
+    return state
 }
 
-const fileReducer = createReducers({
-    [CREATE]: create,
-    [REMOVE]: remove,
-    [SET_CONTENT]: setContent,
-}, Immutable.List())
-
 export const reducer = createReducers({
+    [UPDATE_EDITOR]: update_editor,
+    [UPDATE_SYNCING_IDX]: update_syncingIdx,
     [PULL_REQ]: pull_req,
     [PULL_OK]: pull_ok,
     [PULL_ERR]: pull_err,
     [PUSH_REQ]: push_req,
     [PUSH_OK]: push_ok,
     [PUSH_ERR]: push_err,
-}, defaultValue(), (state, action)=>{
-    return state.update('files', (s)=>(fileReducer(s, action)))
-})
+}, defaultValue())
 
-function* pull({id, loader}) {
+function* pull({ id, loader, saver}) {
     try {
         const json = yield call(loader, id)
-        const file = parseV1(json)
-        yield put(actions.pull_ok(id, file))
+        let text = ''
+        if(!json){
+            yield put(actions.cmd.push(id, saver))
+        }else {
+            text = parseV1(json)
+        }
+        yield put(actions.pull_ok(text))
     } catch (e) {
         yield put(actions.pull_err(e))
     }
 }
 
 function* push({id, saver}) {
-    const getFile = state=>(state.file.getIn(['files', id]))
-    const file = yield select(getFile)
-    const json = toJSONV1(file.toJS())
-    yield put(actions.push_req(json))
-    try {
-        yield call(saver, id, json)
-        yield put(actions.push_ok())
-    } catch(e) {
-        yield put(actions.push_err(e))
+    const getFile = state => (state.file)
+    let file = yield select(getFile)
+    const text = file.editor.getCurrentContent().getPlainText()
+    yield put(actions.push_req(text))
+    file = yield select(getFile)
+
+    let {syncingIdx, syncingQ } = file
+    if (syncingIdx < 0){
+        syncingIdx = syncingQ.length -1
+        const text = syncingQ[syncingIdx]
+        if (text !== undefined) {
+            try {
+                yield put(actions.updateSyncingId(syncingIdx))
+                yield call(saver, id, text)
+                yield put(actions.push_ok(syncingIdx))
+                file = yield select(getFile)
+                if (file.syncingQ.length > 0) {
+                    yield put(actions.cmd.push(id, saver))
+                }
+            } catch (e) {
+                yield put(actions.push_err(e))
+            }
+        }
     }
 }
 
 function* saga() {
-    yield takeLatest(PULL, pull)
-    yield takeLatest(PUSH, push)
+    yield takeEvery(PULL, pull)
+    yield takeEvery(PUSH, push)
 }
 
 export default {
@@ -175,12 +184,12 @@ export default {
 
 function parseV1(json) {
     const obj = JSON.parse(json)
-    const { version, file } = obj
+    const { version, text } = obj
     console.assert(version === 1)
-    return Immutable.fromJS(file)
+    return text
 }
 
-export function toJSONV1(file) {
+export function toJSONV1(text) {
     const version = 1
-    return JSON.stringify({version, file})
+    return JSON.stringify({version, text})
 }

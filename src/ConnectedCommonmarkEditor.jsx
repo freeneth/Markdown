@@ -22,21 +22,20 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
             dispatch(Action.file.cmd.push(id, saveFile))
         },
     }
-    const FileCmd = {
-        createFile: () => {
-            const id = 'fileid'
-            dispatch(Action.file.create(id))
+    const FileListIOCmd = {
+        pull: () =>{
+            dispatch(Action.fileList.cmd.pull(loadFileList))
         },
-        removeFile: (id) => {
-            dispatch(Action.file.remove(id))
-        },
-        setContent: (id, content) => {
-            dispatch(Action.file.setContent(id, content))
+        push: () => {
+            dispatch(Action.fileList.cmd.push(saveFileList))
         },
     }
     return {
+        updateEditor: (editor)=>{
+            dispatch(Action.file.updateEditor(editor))
+        },
         FileIOCmd, 
-        FileCmd,
+        FileListIOCmd,
     }
 }
 
