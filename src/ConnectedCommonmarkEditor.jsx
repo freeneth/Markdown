@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
     const { externalCmd: { saveFile, saveFileList, loadFile, loadFileList }} = ownProps
     const FileIOCmd = {
         pull: (id) => {
-            dispatch(Action.file.cmd.pull(id, loadFile))
+            dispatch(Action.file.cmd.pull(id, loadFile, saveFile))
         },
         push: (id) => {
             dispatch(Action.file.cmd.push(id, saveFile))
@@ -33,6 +33,9 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
     return {
         updateEditor: (editor)=>{
             dispatch(Action.file.updateEditor(editor))
+        },
+        updateFileListState: (fileListState)=>{
+            dispatch(Action.fileList.updateFileListState(fileListState))
         },
         FileIOCmd, 
         FileListIOCmd,

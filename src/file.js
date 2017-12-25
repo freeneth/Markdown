@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 
-import { EditorState } from 'draft-js'
+import { ContentState, EditorState } from 'draft-js'
 import {createReducers} from './redux_helper.js'
 import {takeEvery, put, call, select} from 'redux-saga/effects'
 
@@ -9,6 +9,8 @@ const PUSH = 'FILE/PUSH'
 
 const UPDATE_SYNCING_IDX = 'FILE/UPDATE_SYNCING_IDX'
 const UPDATE_EDITOR = 'FILE/UPDATE_EDITOR'
+const CREATE_DEFAULT = 'FILE/CREATE_DEFAULT'
+
 const PULL_REQ = 'FILE/PULL_REQ'
 const PULL_OK = 'FILE/PULL_OK'
 const PULL_ERR = 'FILE/PULL_ERR'
@@ -26,20 +28,23 @@ export function defaultValue() {
 }
 
 export const actions = {
+    createDefault: () => ({
+        type: CREATE_DEFAULT,
+    }),
     updateEditor: (editor)=>({
         type: UPDATE_EDITOR,
         editor,
     }),
-    updateSyncingId: (syncingIdx)=>({
+    updateSyncingIdx: (syncingIdx)=>({
         type: UPDATE_SYNCING_IDX,
         syncingIdx,
     }),
     pull_req: ()=>({
         type: PULL_REQ,
     }),
-    pull_ok: (json)=>({
+    pull_ok: (text)=>({
         type: PULL_OK,
-        json,
+        text,
     }),
     pull_err: (info)=>({
         type: PULL_ERR,
@@ -58,10 +63,11 @@ export const actions = {
         info,
     }),
     cmd: {
-        pull: (id, loader)=>({
+        pull: (id, loader, saver)=>({
             type: PULL,
             id,
             loader,
+            saver,
         }),
         push: (id, saver)=>({
             type: PUSH,
@@ -69,6 +75,10 @@ export const actions = {
             saver,
         }),
     },
+}
+
+function create_default(old) {
+    
 }
 
 function update_editor(old, {editor}) {
@@ -83,9 +93,10 @@ function pull_req(old) {
     return old.set('syncing', true)
 }
 
-function pull_ok(old, {json}) {
-    const text = parseV1(json)
-    const state = Object.assign({}, old.editor.getCurrentContent().createFromText(text))
+function pull_ok(old, {text}) {
+    const editorContentState = ContentState.createFromText(text)
+    const editorState = EditorState.createWithContent(editorContentState)
+    const state = Object.assign({}, old, {editor: editorState})
     return state
 }
 
@@ -133,7 +144,7 @@ function* pull({ id, loader, saver}) {
         const json = yield call(loader, id)
         let text = ''
         if(!json){
-            yield put(actions.cmd.push(id, saver))
+            yield* push({id, saver})
         }else {
             text = parseV1(json)
         }
@@ -143,7 +154,7 @@ function* pull({ id, loader, saver}) {
     }
 }
 
-function* push({id, saver}) {
+function* push({id, saver, remove = false}) {
     const getFile = state => (state.file)
     let file = yield select(getFile)
     const text = file.editor.getCurrentContent().getPlainText()
@@ -156,8 +167,13 @@ function* push({id, saver}) {
         const text = syncingQ[syncingIdx]
         if (text !== undefined) {
             try {
-                yield put(actions.updateSyncingId(syncingIdx))
-                yield call(saver, id, text)
+                yield put(actions.updateSyncingIdx(syncingIdx))
+                if (remove) {
+                    yield call(saver, id, null)
+                } else {
+                    const json = toJSONV1(text)
+                    yield call(saver, id, json)
+                }
                 yield put(actions.push_ok(syncingIdx))
                 file = yield select(getFile)
                 if (file.syncingQ.length > 0) {

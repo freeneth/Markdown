@@ -7,6 +7,7 @@ import { takeLatest, put, call, select } from 'redux-saga/effects'
 const PULL = 'FILELIST/PULL'
 const PUSH = 'FILELIST/PUSH'
 
+const UPDATE_FILE_LIST_STATE = 'FILELIST/UPDATE_FILE_LIST_STATE'
 const PULL_REQ = 'FILELIST/PULL_REQ'
 const PULL_OK = 'FILELIST/PULL_OK'
 const PULL_ERR = 'FILELIST/PULL_ERR'
@@ -19,11 +20,15 @@ export function defaultValue() {
         syncingQ: [],
         syncingIdx: -1,
         syncingErr: false,
-        fileList: FileListState.createEmpty(),
+        fileListState: FileListState.createEmpty(),
     }
 }
 
 export const actions = {
+    updateFileListState: (fileListState) => ({
+        type: UPDATE_FILE_LIST_STATE,
+        fileListState,
+    }),
     pull_req: () => ({
         type: PULL_REQ,
     }),
@@ -61,6 +66,10 @@ export const actions = {
     },
 }
 
+function update_fileListState(old, { fileListState }) {
+    return Object.assign({}, old, { fileListState })
+}
+
 function pull_req(old) {
     return old.set('syncing', true)
 }
@@ -95,6 +104,7 @@ function push_err(old, { info }) {
 }
 
 export const reducer = createReducers({
+    [UPDATE_FILE_LIST_STATE]: update_fileListState,
     [PULL_REQ]: pull_req,
     [PULL_OK]: pull_ok,
     [PULL_ERR]: pull_err,

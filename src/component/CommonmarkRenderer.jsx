@@ -14,13 +14,13 @@ export default class CommonmarkRenderer extends React.PureComponent {
     }
 
     render() {
-        const {markdown, styles} = this.props
+        const { markdown, styles } = this.props
         const parsed = this.reader.parse(markdown)
         const html = this.writer.render(parsed)
 
         return <div
             style={m(CommonmarkRenderer.styles, styles)}
-            dangerouslySetInnerHTML={{__html: html}}
+            dangerouslySetInnerHTML={{ __html: html }}
         />
     }
 }

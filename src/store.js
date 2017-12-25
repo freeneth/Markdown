@@ -4,12 +4,12 @@ import FileList from './fileList.js'
 export function mock_saveFile(id, json){
     return new Promise((res)=>{
         if (id) {
-            if (json) {
-                console.log('save file', json)
-                window.localStorage.setItem(id, json)
-            } else {
+            if (json === null) {
                 console.log('remove file', id)
                 window.localStorage.removeItem(id)
+            } else if(json !== undefined){
+                console.log('save file', json)
+                window.localStorage.setItem(id, json)
             }
         }
         setTimeout(res, 500)

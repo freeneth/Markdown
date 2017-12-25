@@ -7,52 +7,23 @@ import Sidebar from './Sidebar.jsx'
 import {SimpleFileList} from 'react-simple-file-list'
 import VLayout from './VLayout.jsx'
 import HLayout from './HLayout.jsx'
+import EditorController from './EditorController.jsx'
 /* eslint-enable */
-import { EditorState } from 'draft-js'
-import {FileListState} from 'react-simple-file-list'
 
 export default class CommonmarkEditor extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {
-            fileListState: FileListState.createEmpty()
-        }
-    }
-
-    checkSave() {
-        if (this.editorSyncingIdx < 0 ) {
-            this.editorSyncingIdx = this.editorSyncQueue.length - 1
-            // TODO: implement save
-            this.props.externalCmds.save(this.editorSyncQueue[this.editorSyncingIdx]).then(() => {
-                this.editorSyncQueue = this.editorSyncQueue.slice(this.editorSyncingIdx)
-                this.editorSyncingError = false
-                this.editorSyncingIdx = -1
-            }).catch((e) => {
-                console.error(e)
-                this.editorSyncingError = true
-                this.editorSyncingIdx = -1
-            })
-        }
-    }
-
-    onChange(editorState) {
-        const { updateEditor} = this.props
-        updateEditor(editorState)
     }
 
     componentDidMount() {
-        //console.log('componentDidMount')
-        /* const { FileIOCmd, FileCmd } = this.props
-        FileCmd.createFile()
-        FileIOCmd.push('fileid') */
+        //console.log('commonmarkEditor componentDidMount')
     }
 
     componentWillReceiveProps(nextProps) {
-        const { FileIOCmd } = this.props
-        const fileid = 'testid'
+        const { FileIOCmd, fileList} = this.props
+        const fileid = fileList.fileListState.selectedFile
         const oldText = this.props.file.editor.getCurrentContent().getPlainText()
         const newText = nextProps.file.editor.getCurrentContent().getPlainText()
-        console.log(oldText, newText)
         if (oldText != newText) {
             FileIOCmd.push(fileid)
         }
@@ -76,25 +47,27 @@ export default class CommonmarkEditor extends React.Component {
     }
 
     render() {
-        const { file, file: { syncingIdx}} = this.props
-        console.log('editorSyncingIdx', syncingIdx)
+        const { file, file: { syncingIdx }, fileList, updateFileListState, updateEditor, FileIOCmd} = this.props
         const styles = CommonmarkEditor.styles
         const markdown = file.editor.getCurrentContent().getPlainText()
+        const fileid = fileList.fileListState.selectedFile
 
         return (<div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
             <VLayout styles={{ height: '100%' }}>
                 <Sidebar>
                     <SimpleFileList
-                        state={this.state.fileListState}
-                        updateState={(fileListState) => this.setState({ fileListState })}
+                        state={fileList.fileListState}
+                        updateState={(fileListState) => updateFileListState(fileListState)}
                     />
                 </Sidebar>
                 <HLayout styles={{flexGrow: 2}}>
                     <Toolbar syncing={syncingIdx >= 0}/>
                     <VLayout styles={CommonmarkEditor.styles.content}>
-                        <PlainTextEditor
-                            state={file.editor}
-                            onChange={this.onChange.bind(this)}
+                        <EditorController
+                            fileid={fileid}
+                            file={file}
+                            FileIOCmd={FileIOCmd}
+                            updateEditor={updateEditor}
                             styles={styles.editor}
                         />
                         <CommonmarkRenderer
