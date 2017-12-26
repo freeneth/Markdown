@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack -w --config webpack.config.dev.babel.js",
-    "build": "webpack --progress --config webpack.config.prod.babel.js"
+    "watch": "webpack -w --config webpack.config.dev.js",
+    "build": "webpack --progress --config webpack.config.prod.js"
   },
   "repository": {
     "type": "git",
