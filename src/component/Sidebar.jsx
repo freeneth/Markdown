@@ -34,6 +34,7 @@ export default class Sidebar extends PureComponent {
 
 Sidebar.styles = {
     height: '100%',
+    maxWidth: '30em',
     button: {
         cursor: 'pointer',
         position: 'absolute',
