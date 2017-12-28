@@ -33,9 +33,8 @@
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
-    "redux-sync-state": "git+ssh://gitrepo@gen8.dev:ES6scriptProjects/redux-sync-state.git#master",
+    "redux-sync-state": "git+ssh://gitrepo@gen8.dev:ES6scriptProjects/redux-sync-state.git#release",
     "style-loader": "^0.19.0",
-    "transform-runtime": "^0.0.0",
     "url-loader": "^0.6.2",
     "webpack": "^3.7.1",
     "webpack-merge": "^4.1.1"
