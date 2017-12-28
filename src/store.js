@@ -36,7 +36,7 @@ export function mock_loadFile(id) {
 
 export function mock_loadFileList() {
     return new Promise((res)=>{
-        const fileList = window.localStorage.getItem('cmlist')
+        const fileList = window.localStorage.getItem('cmList')
         console.log('load fileList', fileList)
         setTimeout(()=>res(fileList), 500)
     })

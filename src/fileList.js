@@ -25,7 +25,7 @@ export const actions = {
         type: UPDATE_FILE_LIST_STATE,
         fileListState,
     }),
-    pull_ok: (id, json) => ({
+    pull_ok: (json) => ({
         type: PULL_OK,
         json,
     }),
@@ -89,7 +89,6 @@ function* pull({ loader }) {
         return loader()
     }
     const onOk = function*(id, json) {
-        console.log('dbg', json)
         if (json) {
             const text = parseV1(json)
             yield put(actions.pull_ok(text))
@@ -105,7 +104,7 @@ function* push({ saver }) {
     const getFileList = state => (state.fileList)
     const fileList = yield select(getFileList)
     let { fileListState } = fileList
-    const text = fileListState.toJSON()
+    const text = JSON.stringify(fileListState)
     const json = toJSONV1(text)
 
     const start = (id) => {
@@ -115,7 +114,6 @@ function* push({ saver }) {
     const onOk = function*() {
         yield put(actions.push_ok())
     }
-
     const onError = function*() {
         yield put(actions.push_err())
     }
