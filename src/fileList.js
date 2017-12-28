@@ -3,6 +3,7 @@ import { FileListState } from 'react-simple-file-list'
 import { createReducers } from './redux_helper.js'
 import { takeLatest, put, select } from 'redux-saga/effects'
 import SyncState from 'redux-sync-state'
+import { Object } from 'core-js/library/web/timers';
 
 const PULL = 'FILELIST/PULL'
 const PUSH = 'FILELIST/PUSH'
@@ -56,9 +57,8 @@ function update_fileListState(old, { fileListState }) {
 }
 
 function pull_ok(old, { json }) {
-    const text = parseV1(json)
-    const state = Object.assign({}, old.editor.getCurrentContent().createFromText(text))
-    return state
+    const fileListState = old.fileListState.fromJSON(json)
+    return update_fileListState(old, {fileListState})
 }
 
 function pull_err(old, { info }) {
@@ -89,6 +89,7 @@ function* pull({ loader }) {
         return loader()
     }
     const onOk = function*(id, json) {
+        console.log('dbg', json)
         if (json) {
             const text = parseV1(json)
             yield put(actions.pull_ok(text))

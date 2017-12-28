@@ -43,14 +43,8 @@ export function mock_loadFileList() {
 }
 
 const Action = {
-    file: {
-        ...File.actions,
-        syncState: SyncState.actions,
-    },
-    fileList: {
-        ...FileList.actions,
-        syncState: SyncState.actions,
-    },
+    file: File.actions,
+    fileList: FileList.actions,
 }
 
 const Reducer = combineReducers({
