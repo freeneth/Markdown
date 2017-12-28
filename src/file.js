@@ -1,5 +1,3 @@
-import Immutable from 'immutable'
-
 import { ContentState, EditorState } from 'draft-js'
 import {createReducers} from './redux_helper.js'
 import {takeEvery, put, call, select} from 'redux-saga/effects'

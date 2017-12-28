@@ -3221,6 +3221,17 @@ redux-saga@^0.16.0:
   version "0.16.0"
   resolved "http://registry.npm.taobao.org/redux-saga/download/redux-saga-0.16.0.tgz#0a231db0a1489301dd980f6f2f88d8ced418f724"
 
+"redux-sync-state@git+ssh://gitrepo@gen8.dev:ES6scriptProjects/redux-sync-state.git#master":
+  version "0.0.1"
+  resolved "git+ssh://gitrepo@gen8.dev:ES6scriptProjects/redux-sync-state.git#0f996080d59fc32ec6e811d439030dd0499f4b0d"
+  dependencies:
+    babel-core "^6.26.0"
+    babel-runtime "^6.26.0"
+    immutable "^4.0.0-rc.9"
+    redux "^3.7.2"
+    redux-logger "^3.0.6"
+    redux-saga "^0.16.0"
+
 redux@^3.7.1, redux@^3.7.2:
   version "3.7.2"
   resolved "http://registry.npm.taobao.org/redux/download/redux-3.7.2.tgz#06b73123215901d25d065be342eb026bc1c8537b"

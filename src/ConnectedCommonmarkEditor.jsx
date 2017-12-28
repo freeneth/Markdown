@@ -9,6 +9,7 @@ const mapStateToProps= (state)=>{
     return {
         file: state.file,
         fileList: state.fileList,
+        syncState: state.syncState,
     }
 }
 
@@ -37,7 +38,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
         updateFileListState: (fileListState)=>{
             dispatch(Action.fileList.updateFileListState(fileListState))
         },
-        FileIOCmd, 
+        FileIOCmd,
         FileListIOCmd,
     }
 }

@@ -1,25 +1,20 @@
-import Immutable from 'immutable'
 
 import { FileListState } from 'react-simple-file-list'
 import { createReducers } from './redux_helper.js'
-import { takeLatest, put, call, select } from 'redux-saga/effects'
+import { takeLatest, put, select } from 'redux-saga/effects'
+import SyncState from 'redux-sync-state'
 
 const PULL = 'FILELIST/PULL'
 const PUSH = 'FILELIST/PUSH'
 
 const UPDATE_FILE_LIST_STATE = 'FILELIST/UPDATE_FILE_LIST_STATE'
-const PULL_REQ = 'FILELIST/PULL_REQ'
 const PULL_OK = 'FILELIST/PULL_OK'
 const PULL_ERR = 'FILELIST/PULL_ERR'
-const PUSH_REQ = 'FILELIST/PUSH_REQ'
 const PUSH_OK = 'FILELIST/PUSH_OK'
 const PUSH_ERR = 'FILELIST/PUSH_ERR'
 
 export function defaultValue() {
     return {
-        syncingQ: [],
-        syncingIdx: -1,
-        syncingErr: false,
         fileListState: FileListState.createEmpty(),
     }
 }
@@ -29,21 +24,13 @@ export const actions = {
         type: UPDATE_FILE_LIST_STATE,
         fileListState,
     }),
-    pull_req: () => ({
-        type: PULL_REQ,
-    }),
     pull_ok: (id, json) => ({
         type: PULL_OK,
-        id,
         json,
     }),
     pull_err: (info) => ({
         type: PULL_ERR,
         info,
-    }),
-    push_req: (json) => ({
-        type: PUSH_REQ,
-        json,
     }),
     push_ok: () => ({
         type: PUSH_OK,
@@ -53,14 +40,12 @@ export const actions = {
         info,
     }),
     cmd: {
-        pull: (id, loader) => ({
+        pull: (loader) => ({
             type: PULL,
-            id,
             loader,
         }),
-        push: (id, saver) => ({
+        push: (saver) => ({
             type: PUSH,
-            id,
             saver,
         }),
     },
@@ -70,11 +55,7 @@ function update_fileListState(old, { fileListState }) {
     return Object.assign({}, old, { fileListState })
 }
 
-function pull_req(old) {
-    return old.set('syncing', true)
-}
-
-function pull_ok(old, { id, json }) {
+function pull_ok(old, { json }) {
     const text = parseV1(json)
     const state = Object.assign({}, old.editor.getCurrentContent().createFromText(text))
     return state
@@ -82,68 +63,62 @@ function pull_ok(old, { id, json }) {
 
 function pull_err(old, { info }) {
     console.error(info)
-    return old.set('syncing', false)
+    return old
 }
 
-function push_req(old, { text }) {
-    const oldText = old.file.editor.getCurrentContent().getPlainText()
-    let state = old
-    if (text !== oldText) {
-        state = old.syncingQ.push(text)
-    }
-    return state
-}
-
-function push_ok(old, { syncingIdx }) {
-    return old.set('syncingErr', false).set('syncingIdx', -1).set('syncingQ').slice(syncingIdx)
+function push_ok(old) {
+    return old
 }
 
 function push_err(old, { info }) {
     console.error(info)
-    return old.set('syncingErr', false).set('syncingIdx', -1)
+    return old
 }
 
 export const reducer = createReducers({
     [UPDATE_FILE_LIST_STATE]: update_fileListState,
-    [PULL_REQ]: pull_req,
     [PULL_OK]: pull_ok,
     [PULL_ERR]: pull_err,
-    [PUSH_REQ]: push_req,
     [PUSH_OK]: push_ok,
     [PUSH_ERR]: push_err,
 }, defaultValue())
 
-function* pull({ id, loader, saver }) {
-    try {
-        const json = yield call(loader, id)
-        let text = ''
-        if (!json) {
-            yield this.push(id, saver)
-        } else {
-            text = parseV1(json)
-        }
-        yield put(actions.pull_ok(id, text))
-    } catch (e) {
-        yield put(actions.pull_err(e))
+function* pull({ loader }) {
+    const start = function(id) {
+        console.log('reading', id)
+        return loader()
     }
+    const onOk = function*(id, json) {
+        if (json) {
+            const text = parseV1(json)
+            yield put(actions.pull_ok(text))
+        }
+    }
+    const onError = function*(id, info) {
+        yield put(actions.push_err(info))
+    }
+    yield put(SyncState.actions.read('fileList', start, onOk, onError))
 }
 
-function* push({ id, saver }) {
-    const getFile = state => (state.file)
-    const file = yield select(getFile)
-    let { editor, syncingIdx, syncingQ } = file
-    const text = editor.getCurrentContent().getPlainText()
-    yield put(actions.push_req(text))
+function* push({ saver }) {
+    const getFileList = state => (state.fileList)
+    const fileList = yield select(getFileList)
+    let { fileListState } = fileList
+    const text = fileListState.toJSON()
+    const json = toJSONV1(text)
 
-    if (syncingIdx < 0) {
-        syncingIdx = syncingQ.length - 1
-        try {
-            yield call(saver, id, syncingQ[syncingIdx])
-            yield put(actions.push_ok(syncingIdx))
-        } catch (e) {
-            yield put(actions.push_err(e))
-        }
+    const start = (id) => {
+        console.log('saving', id)
+        return saver(json)
     }
+    const onOk = function*() {
+        yield put(actions.push_ok())
+    }
+
+    const onError = function*() {
+        yield put(actions.push_err())
+    }
+    yield put(SyncState.actions.write('fileList', start, onOk, onError))
 }
 
 function* saga() {

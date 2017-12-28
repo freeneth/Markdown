@@ -16,16 +16,21 @@ export default class CommonmarkEditor extends React.Component {
     }
 
     componentDidMount() {
+        const ioCmd = this.props.FileListIOCmd
+        ioCmd.pull()
         //console.log('commonmarkEditor componentDidMount')
     }
 
     componentWillReceiveProps(nextProps) {
-        const { FileIOCmd, fileList} = this.props
+        const { FileIOCmd, FileListIOCmd, fileList } = this.props
         const fileid = fileList.fileListState.selectedFile
         const oldText = this.props.file.editor.getCurrentContent().getPlainText()
         const newText = nextProps.file.editor.getCurrentContent().getPlainText()
         if (oldText != newText) {
             FileIOCmd.push(fileid)
+        }
+        if (!fileList.fileListState.equals(nextProps.fileList.fileListState)) {
+            FileListIOCmd.push()
         }
         //console.log('componentWillReceiveProps')
     }

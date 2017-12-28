@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux'
 import File from './file.js'
 import FileList from './fileList.js'
+import SyncState from 'redux-sync-state'
 export function mock_saveFile(id, json){
     return new Promise((res)=>{
         if (id) {
@@ -36,23 +37,32 @@ export function mock_loadFile(id) {
 export function mock_loadFileList() {
     return new Promise((res)=>{
         const fileList = window.localStorage.getItem('cmlist')
+        console.log('load fileList', fileList)
         setTimeout(()=>res(fileList), 500)
     })
 }
 
-
 const Action = {
-    file: File.actions,
-    fileList: FileList.actions,
+    file: {
+        ...File.actions,
+        syncState: SyncState.actions,
+    },
+    fileList: {
+        ...FileList.actions,
+        syncState: SyncState.actions,
+    },
 }
 
 const Reducer = combineReducers({
+    syncState: SyncState.reducer,
     file: File.reducer,
     fileList: FileList.reducer,
 })
 
 function* Saga() {
+    yield* SyncState.saga()
     yield* File.saga()
+    yield* FileList.saga()
 }
 
 export {
