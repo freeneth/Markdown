@@ -23,7 +23,7 @@ export default class CommonmarkEditor extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         const { FileListIOCmd, fileList } = this.props
-        if (!fileList.fileListState.equals(nextProps.fileList.fileListState)) {
+        if (!fileList.equals(nextProps.fileList)) {
             FileListIOCmd.push()
         }
         //console.log('componentWillReceiveProps')
@@ -31,14 +31,6 @@ export default class CommonmarkEditor extends React.Component {
 
     componentWillUpdate(nextProps, nextState){
 
-        /* const selectedFile = this.state.fileListState.selectedFile
-        const nextSelectedFile = nextState.fileListState.selectedFile
-        if (selectedFile !== nextSelectedFile){
-            console.log('componentWillUpdate not...')
-            const { FileIOCmd, FileCmd } = this.props
-            FileCmd.createFile()
-            FileIOCmd.pull(nextSelectedFile)
-        } */
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -49,14 +41,14 @@ export default class CommonmarkEditor extends React.Component {
         const { file, file: { syncingIdx }, fileList, updateFileListState, updateEditor, FileIOCmd} = this.props
         const styles = CommonmarkEditor.styles
         const markdown = file.editor.getCurrentContent().getPlainText()
-        const fileid = fileList.fileListState.selectedFile
+        const fileid = fileList.selectedFile
 
         return (<div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
             <VLayout styles={{ height: '100%' }}>
                 <Sidebar>
                     <SimpleFileList
-                        state={fileList.fileListState}
-                        updateState={(fileListState) => updateFileListState(fileListState)}
+                        state={fileList}
+                        updateState={updateFileListState}
                     />
                 </Sidebar>
                 <HLayout styles={{flexGrow: 2}}>

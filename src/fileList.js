@@ -13,11 +13,6 @@ const PULL_ERR = 'FILELIST/PULL_ERR'
 const PUSH_OK = 'FILELIST/PUSH_OK'
 const PUSH_ERR = 'FILELIST/PUSH_ERR'
 
-export function defaultValue() {
-    return {
-        fileListState: FileListState.createEmpty(),
-    }
-}
 
 export const actions = {
     updateFileListState: (fileListState) => ({
@@ -52,12 +47,12 @@ export const actions = {
 }
 
 function update_fileListState(old, { fileListState }) {
-    return Object.assign({}, old, { fileListState })
+    return fileListState
 }
 
 function pull_ok(old, { json }) {
-    const fileListState = old.fileListState.fromJSON(json)
-    return update_fileListState(old, {fileListState})
+    const fileListState = old.fromJSON(json)
+    return fileListState
 }
 
 function pull_err(old, { info }) {
@@ -80,7 +75,7 @@ export const reducer = createReducers({
     [PULL_ERR]: pull_err,
     [PUSH_OK]: push_ok,
     [PUSH_ERR]: push_err,
-}, defaultValue())
+}, FileListState.createEmpty())
 
 function* pull({ loader }) {
     const start = function(id) {
@@ -90,7 +85,9 @@ function* pull({ loader }) {
     const onOk = function*(id, json) {
         if (json) {
             const text = parseV1(json)
-            yield put(actions.pull_ok(text))
+            if (text) {
+                yield put(actions.pull_ok(text))
+            }
         }
     }
     const onError = function*(id, info) {
@@ -102,8 +99,7 @@ function* pull({ loader }) {
 function* push({ saver }) {
     const getFileList = state => (state.fileList)
     const fileList = yield select(getFileList)
-    let { fileListState } = fileList
-    const text = JSON.stringify(fileListState)
+    const text = JSON.stringify(fileList)
     const json = toJSONV1(text)
 
     const start = (id) => {
@@ -125,7 +121,6 @@ function* saga() {
 }
 
 export default {
-    defaultValue,
     actions,
     reducer,
     saga,
