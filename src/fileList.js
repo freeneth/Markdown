@@ -3,7 +3,6 @@ import { FileListState } from 'react-simple-file-list'
 import { createReducers } from './redux_helper.js'
 import { takeLatest, put, select } from 'redux-saga/effects'
 import SyncState from 'redux-sync-state'
-import { Object } from 'core-js/library/web/timers';
 
 const PULL = 'FILELIST/PULL'
 const PUSH = 'FILELIST/PUSH'
