@@ -2,6 +2,17 @@
 # yarn lockfile v1
 
 
+a11y-focus-scope@^1.1.0:
+  version "1.1.3"
+  resolved "http://registry.npm.taobao.org/a11y-focus-scope/download/a11y-focus-scope-1.1.3.tgz#f795384d4dd40ccec1c4a160ef4d13371d015ae8"
+  dependencies:
+    focusin "^2.0.0"
+    tabbable "^1.0.0"
+
+a11y-focus-store@^1.0.0:
+  version "1.0.0"
+  resolved "http://registry.npm.taobao.org/a11y-focus-store/download/a11y-focus-store-1.0.0.tgz#ae52561cb86ae6c2904c1a4abf2e5820bf5305b0"
+
 abbrev@1:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/abbrev/download/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -1603,6 +1614,10 @@ execa@^0.7.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
+exenv@^1.2.0:
+  version "1.2.2"
+  resolved "http://registry.npm.taobao.org/exenv/download/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
+
 expand-brackets@^0.1.4:
   version "0.1.5"
   resolved "http://registry.npm.taobao.org/expand-brackets/download/expand-brackets-0.1.5.tgz#df07284e342a807cd733ac5af72411e581d1177b"
@@ -1695,6 +1710,10 @@ flush-write-stream@^1.0.0:
   dependencies:
     inherits "^2.0.1"
     readable-stream "^2.0.4"
+
+focusin@^2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/focusin/download/focusin-2.0.0.tgz#58c01180dfb1949f03e3ddeee063739fc33b6ffc"
 
 for-in@^1.0.1:
   version "1.0.2"
@@ -2990,7 +3009,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.6.0:
+prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0:
   version "15.6.0"
   resolved "http://registry.npm.taobao.org/prop-types/download/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
   dependencies:
@@ -3116,6 +3135,15 @@ react-dom@^16.2.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.0"
+
+react-modal2@^5.0.0:
+  version "5.0.0"
+  resolved "http://registry.npm.taobao.org/react-modal2/download/react-modal2-5.0.0.tgz#d8810285d79740a1f380e528e12f3d6a7bb1ab8e"
+  dependencies:
+    a11y-focus-scope "^1.1.0"
+    a11y-focus-store "^1.0.0"
+    exenv "^1.2.0"
+    prop-types "^15.5.8"
 
 react-overflow-ellipsis@^1.0.3:
   version "1.0.3"
@@ -3660,6 +3688,10 @@ svgo@^0.7.0:
 symbol-observable@^1.0.3:
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/symbol-observable/download/symbol-observable-1.1.0.tgz#5c68fd8d54115d9dfb72a84720549222e8db9b32"
+
+tabbable@^1.0.0:
+  version "1.1.2"
+  resolved "http://registry.npm.taobao.org/tabbable/download/tabbable-1.1.2.tgz#b171680aea6e0a3e9281ff23532e2e5de11c0d94"
 
 tapable@^0.2.7:
   version "0.2.8"

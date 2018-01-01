@@ -17,6 +17,9 @@ import 'draft-js/dist/Draft.css'
 //     saveFileList: (json)=>Promise()
 //     loadFile: (id)=>Promise(json)
 //     loadFileList: ()=>Promise(json)
+
+//      setShare: (shareid,fileid,options)=>Promise()
+//      getShare: (fileid) =>Promise([{options}])
 // }
 export default function initCommonMark(element, callbacks, readonly=false) {
     const logger = createLogger({
@@ -49,24 +52,24 @@ export default function initCommonMark(element, callbacks, readonly=false) {
     console.assert(callbacks.saveFileList, 'need saveFileList')
     console.assert(callbacks.loadFile, 'need loadFile')
     console.assert(callbacks.loadFileList, 'need loadFileList')
-    //console.assert(callbacks.setShare, 'need setShare')
-    //console.assert(callbacks.getShare, 'need getShare')
+    console.assert(callbacks.setShare, 'need setShare')
+    console.assert(callbacks.getShare, 'need getShare')
 
     const {
         saveFile,
         saveFileList,
         loadFile,
         loadFileList,
-        //setShare,
-        //getShare,
+        setShare,
+        getShare,
     } = callbacks
     const externalCmd = {
         saveFile,
         saveFileList,
         loadFile,
         loadFileList,
-        //setShare,
-        //getShare,
+        setShare,
+        getShare,
     }
 
     render(<Provider store={store}>

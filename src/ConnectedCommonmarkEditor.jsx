@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
-import { Action } from './store.js';
+import { Action } from './store.js'
+import Random from './random.js'
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import CommonmarkEditor from './component/CommonmarkEditor.jsx'
@@ -10,11 +11,12 @@ const mapStateToProps= (state)=>{
         file: state.file,
         fileList: state.fileList,
         syncState: state.syncState,
+        fileShare: state.fileShare.toJS(),
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) =>{
-    const { externalCmd: { saveFile, saveFileList, loadFile, loadFileList }} = ownProps
+    const { externalCmd: { saveFile, saveFileList, loadFile, loadFileList,setShare, getShare }} = ownProps
     const FileIOCmd = {
         pull: (id) => {
             dispatch(Action.file.cmd.pull(id, loadFile, saveFile))
@@ -31,6 +33,30 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
             dispatch(Action.fileList.cmd.push(saveFileList))
         },
     }
+    const FileShareIOCmd = {
+        set: (shareid) => {
+            dispatch(Action.fileShare.set(shareid, setShare))
+        },
+        get: (fileid) => {
+            dispatch(Action.fileShare.get(fileid, getShare))
+        },
+    }
+    const FileShareCmd = {
+        enable: (shareid) => {
+            dispatch(Action.fileShare.enable(shareid))
+        },
+        disable: (shareid) => {
+            dispatch(Action.fileShare.disable(shareid))
+        },
+        create: (fileid) => {
+            const shareid = Random.string(12)
+            dispatch(Action.fileShare.create(fileid, shareid))
+            return shareid
+        },
+        remove: (shareid) => {
+            dispatch(Action.fileShare.remove(shareid))
+        },
+    }
     return {
         updateEditor: (editor)=>{
             dispatch(Action.file.updateEditor(editor))
@@ -40,6 +66,8 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
         },
         FileIOCmd,
         FileListIOCmd,
+        FileShareCmd,
+        FileShareIOCmd,
     }
 }
 
