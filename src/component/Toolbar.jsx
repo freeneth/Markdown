@@ -27,11 +27,11 @@ export default class Toolbar extends PureComponent {
     }
 
     render() {
-        const { syncing, fileid, fileShare, fileShareCmd, fileShareIOCmd} = this.props
+        const { syncing, fileid, fileShare, fileShareCmd, fileShareIOCmd, editor, onEditor } = this.props
         const syncingText = syncing ? '同步中...' : '准备就绪'
-
+        const showEditor = editor ? '预览' : '编辑'
         let shareDialog = null
-        if(this.state.shareDialog.get('display')){
+        if (this.state.shareDialog.get('display')) {
             shareDialog = <ShareDialog
                 title={this.state.shareDialog.get('title')}
                 display={true}
@@ -46,6 +46,7 @@ export default class Toolbar extends PureComponent {
             <div>
                 <div style={Toolbar.styles.bar}>
                     {syncingText}
+                    <div onClick={onEditor}>{showEditor}</div>
                     <div onClick={() => this.showShareDialog(fileid)}>分享</div>
                 </div>
                 {shareDialog}

@@ -23,8 +23,9 @@ export default class EditorController extends React.Component {
     }
 
     onChange(editorState) {
-        const { updateEditor } = this.props
+        const { updateEditor, fileid, FileIOCmd } = this.props
         updateEditor(editorState)
+        FileIOCmd.push(fileid)
     }
 
     render() {
