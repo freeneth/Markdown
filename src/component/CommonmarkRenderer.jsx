@@ -8,7 +8,6 @@ import styled from 'styled-components'
 /* eslint-disable no-unused-vars */
 const ContentDiv = styled.div`
     max-width: 60em;
-    min-width: 30em;
     margin: 0 auto;
     padding: 2.5em;
     h1, h2, h3, h4, h5, h6 {
