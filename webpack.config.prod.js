@@ -12,10 +12,6 @@ module.exports = merge(common, {
     externals: {
         immutable: 'Immutable',
         react: 'React',
-        redux: 'Redux',
-        'react-redux': 'ReactRedux',
-        'redux-saga': 'ReduxSaga',
-        'redux-saga/effects': 'ReduxSaga/effects',
         'react-dom': 'ReactDom',
         'react-simple-file-list': 'SimpleFileList',
     },
