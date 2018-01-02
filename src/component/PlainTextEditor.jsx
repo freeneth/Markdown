@@ -4,6 +4,7 @@ import { Editor} from 'draft-js'
 /* eslint-enable */
 import { m } from '../style.js'
 
+
 export default class PlainTextEditor extends React.Component {
     constructor(props) {
         super(props)
@@ -43,6 +44,7 @@ export default class PlainTextEditor extends React.Component {
 }
 
 PlainTextEditor.styles = {
+    display: 'block',
     cursor: 'text',
     padding: '1em',
     overflowY: 'auto',
