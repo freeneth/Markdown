@@ -82,6 +82,20 @@ export function mock_getShare(fileid) {
     })
 }
 
+export function mock_getFileid() {
+    return new Promise((res) => {
+        setTimeout(() => res('pafdpduq56'), 500)
+    })
+}
+
+export function mock_loadShareFile() {
+    return new Promise((res) => {
+        const filejson = window.localStorage.getItem('pafdpduq56')
+        const file = JSON.parse(filejson)
+        setTimeout(() => res(file.text), 500)
+    })
+}
+
 const Action = {
     file: File.actions,
     fileList: FileList.actions,
