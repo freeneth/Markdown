@@ -78,11 +78,11 @@ export const reducer = createReducers({
 }, FileListState.createEmpty())
 
 function* pull({ loader }) {
-    const start = function(id) {
-        console.log('reading', id)
+    const start = function(workid) {
+        console.log('reading', workid)
         return loader()
     }
-    const onOk = function*(id, json) {
+    const onOk = function*(workid, json) {
         if (json) {
             const text = parseV1(json)
             if (text) {
@@ -102,8 +102,8 @@ function* push({ saver }) {
     const text = JSON.stringify(fileList)
     const json = toJSONV1(text)
 
-    const start = (id) => {
-        console.log('saving', id)
+    const start = (workid) => {
+        console.log('saving', workid)
         return saver(json)
     }
     const onOk = function*() {

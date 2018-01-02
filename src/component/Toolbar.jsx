@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import ShareDialog from './ShareDialog.jsx'
+import {NonSelectDiv, ClickableDiv} from '../style.js'
 /* eslint-enable */
 import { PureComponent } from 'react'
 import Immutable from 'immutable'
@@ -27,9 +28,9 @@ export default class Toolbar extends PureComponent {
     }
 
     render() {
-        const { syncing, fileid, fileShare, fileShareCmd, fileShareIOCmd, editor, onEditor } = this.props
+        const { syncing, fileid, fileShare, fileShareCmd, fileShareIOCmd, showEditor, toggle } = this.props
         const syncingText = syncing ? '同步中...' : '准备就绪'
-        const showEditor = editor ? '预览' : '编辑'
+        const toggleText = showEditor ? '预览' : '编辑'
         let shareDialog = null
         if (this.state.shareDialog.get('display')) {
             shareDialog = <ShareDialog
@@ -45,9 +46,9 @@ export default class Toolbar extends PureComponent {
         return (
             <div>
                 <div style={Toolbar.styles.bar}>
-                    {syncingText}
-                    <div onClick={onEditor}>{showEditor}</div>
-                    <div onClick={() => this.showShareDialog(fileid)}>分享</div>
+                    <NonSelectDiv>{syncingText}</NonSelectDiv>
+                    <ClickableDiv onClick={toggle}>{toggleText}</ClickableDiv>
+                    <ClickableDiv onClick={() => this.showShareDialog(fileid)}>分享</ClickableDiv>
                 </div>
                 {shareDialog}
             </div>

@@ -9,13 +9,15 @@ import VLayout from './VLayout.jsx'
 import HLayout from './HLayout.jsx'
 import EditorController from './EditorController.jsx'
 /* eslint-enable */
+import {m} from '../style.js'
 
 export default class CommonmarkEditor extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            editor: false,
+            showEditor: false,
         }
+        this.toggleShowEditor = this.toggleShowEditor.bind(this)
 
     }
 
@@ -33,11 +35,8 @@ export default class CommonmarkEditor extends React.Component {
         //console.log('componentWillReceiveProps')
     }
 
-    onEditor(){
-        const tag = this.state.editor ? false: true
-        const display = this.state.editor ? 'none' : 'unset'
-        CommonmarkEditor.styles.editor.display = display
-        this.setState({ editor: tag })
+    toggleShowEditor(){
+        this.setState({ showEditor: !this.state.showEditor })
     }
 
     render() {
@@ -46,6 +45,7 @@ export default class CommonmarkEditor extends React.Component {
         const markdown = file.editor.getCurrentContent().getPlainText()
         const fileid = fileList.selectedFile
 
+        const editorDisplay = {display: this.state.showEditor ? 'flex' :'none' }
         return (<div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
             <VLayout styles={{ height: '100%', borderStyle: 'none' }}>
                 <Sidebar>
@@ -61,8 +61,8 @@ export default class CommonmarkEditor extends React.Component {
                         fileShare={fileShare}
                         fileShareIOCmd={FileShareIOCmd}
                         fileShareCmd={FileShareCmd}
-                        editor={this.state.editor}
-                        onEditor={this.onEditor.bind(this)}
+                        showEditor={this.state.showEditor}
+                        toggle={this.toggleShowEditor}
                     />
                     <VLayout styles={CommonmarkEditor.styles.content}>
                         <EditorController
@@ -70,7 +70,7 @@ export default class CommonmarkEditor extends React.Component {
                             file={file}
                             FileIOCmd={FileIOCmd}
                             updateEditor={updateEditor}
-                            styles={styles.editor}
+                            styles={m(styles.editor, editorDisplay)}
                         />
                         <CommonmarkRenderer
                             markdown={markdown}
