@@ -13,6 +13,10 @@ import EditorController from './EditorController.jsx'
 export default class CommonmarkEditor extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            editor: false,
+        }
+
     }
 
     componentDidMount() {
@@ -29,12 +33,11 @@ export default class CommonmarkEditor extends React.Component {
         //console.log('componentWillReceiveProps')
     }
 
-    componentWillUpdate(nextProps, nextState){
-
-    }
-
-    componentDidUpdate(prevProps, prevState){
-        //console.log('componentDidUpdate')
+    onEditor(){
+        const tag = this.state.editor ? false: true
+        const display = this.state.editor ? 'none' : 'unset'
+        CommonmarkEditor.styles.editor.display = display
+        this.setState({ editor: tag })
     }
 
     render() {
@@ -57,6 +60,8 @@ export default class CommonmarkEditor extends React.Component {
                         fileShare={fileShare}
                         fileShareIOCmd={FileShareIOCmd}
                         fileShareCmd={FileShareCmd}
+                        editor={this.state.editor}
+                        onEditor={this.onEditor.bind(this)}
                     />
                     <VLayout styles={CommonmarkEditor.styles.content}>
                         <EditorController
@@ -95,6 +100,7 @@ CommonmarkEditor.styles = {
     editor: {
         flexGrow: 1,
         width: '55%',
+        display: 'none',
     },
     renderer: {
         flexGrow: 1,
