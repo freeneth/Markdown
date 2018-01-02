@@ -47,9 +47,10 @@ export default class CommonmarkEditor extends React.Component {
         const fileid = fileList.selectedFile
 
         return (<div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
-            <VLayout styles={{ height: '100%' }}>
+            <VLayout styles={{ height: '100%', borderStyle: 'none' }}>
                 <Sidebar>
                     <SimpleFileList
+                        styles={{borderStyle: 'none'}}
                         state={fileList}
                         updateState={updateFileListState}
                     />

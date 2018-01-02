@@ -1,46 +1,72 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 /* eslint-enable */
-import { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
-export default class Sidebar extends PureComponent {
+/* eslint-disable no-unused-vars */
+const DIV = styled.div`
+    position: relative;
+    height: 100%;
+`
+
+const BUTTON = styled.div`
+    position: absolute;
+    top: 0;
+    width: 2em;
+    height: 2em;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    background-color: rgba(128, 128, 128, 0.5);
+    color: #ffdcea;
+    border-radius: 5px;
+`
+
+const BUTTONO = styled(BUTTON)`
+    left: 0;
+`
+const BUTTONC = styled(BUTTON)`
+    right: 0;
+`
+/* eslint-enable */
+
+export default class Sidebar extends React.PureComponent {
     constructor(props){
         super(props)
         this.state = {
             hide: false,
         }
+        this.toggleHide = this.toggleHide.bind(this)
     }
 
-    hide() {
-        this.setState({ hidden: true })
-    }
-
-    show() {
-        this.setState({ hidden: false })
+    toggleHide() {
+        this.setState((old)=>({hide: !old.hide}))
     }
 
     render() {
-        const show_button = <div style={Sidebar.styles.button} onClick={() => this.show()}> 展开 </div>
-        const hide_button = <div style={Sidebar.styles.button} onClick={() => this.hide()}> 收起 </div>
-        const button = this.state.hidden ? show_button : hide_button
-        return (<div>
-            {button}
-            <div style={this.state.hidden ? Sidebar.styles.hide : Sidebar.styles} >
-                {this.props.children}
+        const {children} = this.props
+        const button = this.state.hide ? (
+            <BUTTONO onClick={this.toggleHide}> {'»'} </BUTTONO>
+        ) : (
+            <BUTTONC onClick={this.toggleHide}> {'«'} </BUTTONC>
+        )
+        const content = this.state.hide ? null : (
+            <div style={{
+                minWidth: '30em',
+                height: '100%',
+            }}>
+                {children}
             </div>
-        </div>)
+        )
+        return <DIV {...this.props}
+        >
+            {button}
+            {content}
+        </DIV>
     }
 }
 
-Sidebar.styles = {
-    height: '100%',
-    maxWidth: '30em',
-    button: {
-        cursor: 'pointer',
-        position: 'absolute',
-        height: '2em',
-    },
-    hide: {
-        display: 'none',
-    },
+Sidebar.propTypes = {
+    children: PropTypes.object.isRequired,
 }
