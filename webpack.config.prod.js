@@ -10,18 +10,13 @@ module.exports = merge(common, {
         main: path.resolve('./src/main.jsx'),
     },
     externals: {
-        commonmark: 'commonmark',
         immutable: 'Immutable',
         react: 'React',
         redux: 'Redux',
         'react-redux': 'ReactRedux',
         'redux-saga': 'ReduxSaga',
         'redux-saga/effects': 'ReduxSaga/effects',
-        'draft-js': 'DraftJs',
-        'styled-components': 'styled',
         'react-dom': 'ReactDom',
-        'prop-types': 'PropTypes',
-        'react-modal2': 'ReactModal2',
         'react-simple-file-list': 'SimpleFileList',
     },
     output: {
