@@ -44,16 +44,16 @@ export const actions = {
         info,
     }),
     cmd: {
-        pull: (id, loader, saver)=>({
+        pull: (id, loader)=>({
             type: PULL,
             id,
             loader,
-            saver,
         }),
-        push: (id, saver)=>({
+        push: (id, saver, remove)=>({
             type: PUSH,
             id,
             saver,
+            remove,
         }),
     },
 }
@@ -112,7 +112,7 @@ function* pull({ id, loader}) {
     yield put(SyncState.actions.read('file', start, onOk, onError))
 }
 
-function* push({id, saver, remove = false}) {
+function* push({id, saver, remove}) {
     const getFile = state => (state.file)
     let file = yield select(getFile)
     const text = file.editor.getCurrentContent().getPlainText()

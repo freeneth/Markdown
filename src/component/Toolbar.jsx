@@ -46,9 +46,9 @@ export default class Toolbar extends PureComponent {
         return (
             <div>
                 <div style={Toolbar.styles.bar}>
-                    <NonSelectDiv>{syncingText}</NonSelectDiv>
-                    <ClickableDiv onClick={toggle}>{toggleText}</ClickableDiv>
-                    <ClickableDiv onClick={() => this.showShareDialog(fileid)}>分享</ClickableDiv>
+                    <NonSelectDiv style={{padding: '1em'}}>{syncingText}</NonSelectDiv>
+                    <ClickableDiv style={{padding: '1em'}} onClick={toggle}>{toggleText}</ClickableDiv>
+                    <ClickableDiv style={{padding: '1em'}} onClick={() => this.showShareDialog(fileid)}>分享</ClickableDiv>
                 </div>
                 {shareDialog}
             </div>

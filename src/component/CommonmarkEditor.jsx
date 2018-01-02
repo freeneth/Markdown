@@ -40,7 +40,7 @@ export default class CommonmarkEditor extends React.Component {
     }
 
     render() {
-        const { file, file: { syncingIdx }, fileList, updateFileListState, updateEditor, FileIOCmd, fileShare, FileShareIOCmd, FileShareCmd } = this.props
+        const { file, syncState, fileList, updateFileListState, updateEditor, FileIOCmd, fileShare, FileShareIOCmd, FileShareCmd } = this.props
         const styles = CommonmarkEditor.styles
         const markdown = file.editor.getCurrentContent().getPlainText()
         const fileid = fileList.selectedFile
@@ -55,8 +55,8 @@ export default class CommonmarkEditor extends React.Component {
                         updateState={updateFileListState}
                     />
                 </Sidebar>
-                <HLayout styles={{flexGrow: 2}}>
-                    <Toolbar syncing={syncingIdx >= 0}
+                <HLayout styles={{flexGrow: 1}}>
+                    <Toolbar syncing={syncState.syncing}
                         fileid={fileid}
                         fileShare={fileShare}
                         fileShareIOCmd={FileShareIOCmd}
@@ -68,6 +68,7 @@ export default class CommonmarkEditor extends React.Component {
                         <EditorController
                             fileid={fileid}
                             file={file}
+                            fileList={fileList}
                             FileIOCmd={FileIOCmd}
                             updateEditor={updateEditor}
                             styles={m(styles.editor, editorDisplay)}

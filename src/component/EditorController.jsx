@@ -16,7 +16,12 @@ export default class EditorController extends React.Component {
     componentWillReceiveProps(nextProps){
         const { fileid, FileIOCmd } = this.props
         const nextFileid = nextProps.fileid
-        if (fileid !== nextFileid) {
+        console.log('hasFile',  nextProps.fileList.hasFile(fileid))
+        if (fileid && !nextProps.fileList.hasFile(fileid)) {
+            //remove
+            FileIOCmd.push(fileid, true)
+        }
+        if (nextFileid && nextFileid !== fileid) {
             FileIOCmd.pull(nextFileid)
         }
     }

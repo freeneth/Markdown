@@ -21,7 +21,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
         pull: (id) => {
             dispatch(Action.file.cmd.pull(id, loadFile, saveFile))
         },
-        push: (id, remove=false) => {
+        push: (id, remove) => {
             dispatch(Action.file.cmd.push(id, saveFile, remove))
         },
     }
