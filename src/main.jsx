@@ -80,7 +80,7 @@ export default function initCommonMark(element, callbacks, readonly=false) {
 
 // callbacks: {
 //     getFileid: ()=>Promise(fileid)
-//     loadFile: (id)=>Promise(json)
+//     loadShareFile: (id)=>Promise(json)
 // }
 export function initShareCommonMark(element, callbacks) {
     const logger = createLogger({
