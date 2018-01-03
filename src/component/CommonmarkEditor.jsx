@@ -45,7 +45,7 @@ export default class CommonmarkEditor extends React.Component {
         const markdown = file.editor.getCurrentContent().getPlainText()
         const fileid = fileList.selectedFile
 
-        const editorDisplay = {display: this.state.showEditor ? 'flex' :'none' }
+        const editorDisplay = {display: this.state.showEditor ? 'block' :'none' }
         return (<div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
             <VLayout styles={{ height: '100%', borderStyle: 'none' }}>
                 <Sidebar>
