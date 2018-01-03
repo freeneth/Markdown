@@ -33,9 +33,7 @@ export default class EditorController extends React.Component {
 
         const newText = editorState.getCurrentContent().getPlainText()
         console.log('onChange',text,newText)
-        if (text !== newText) {
-            FileIOCmd.push(fileid)
-        }
+        FileIOCmd.push(fileid)
     }
 
     render() {
