@@ -29,9 +29,8 @@ export default class EditorController extends React.Component {
     onChange(editorState) {
         const { updateEditor, fileid, FileIOCmd } = this.props
         const text = this.props.file.editor.getCurrentContent().getPlainText()
-        
         const newText = editorState.getCurrentContent().getPlainText()
-        console.log('onChange',text,newText)
+
         if (text !== newText) {
             FileIOCmd.push(fileid)
         }

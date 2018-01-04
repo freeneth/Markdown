@@ -3259,7 +3259,7 @@ redux-saga@^0.16.0:
 
 "redux-sync-state@git+ssh://gitrepo@gen8.dev:ES6scriptProjects/redux-sync-state.git#release":
   version "0.0.1"
-  resolved "git+ssh://gitrepo@gen8.dev:ES6scriptProjects/redux-sync-state.git#cda5f3b8829bea47a38e6bdbe40e961001295e83"
+  resolved "git+ssh://gitrepo@gen8.dev:ES6scriptProjects/redux-sync-state.git#bdef983ecc107493a37a07e2a9cbe14ad9d5acff"
   dependencies:
     babel-core "^6.26.0"
     babel-runtime "^6.26.0"
