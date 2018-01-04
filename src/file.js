@@ -62,6 +62,15 @@ function update_editor(old, {editor}) {
     return Object.assign({},old,{editor})
 }
 
+function create_default(old) {
+    const defaultText = require('./defaultText.raw')
+
+    const editorContentState = ContentState.createFromText(defaultText)
+    const editorState = EditorState.createWithContent(editorContentState)
+    const state = Object.assign({}, old, {editor: editorState})
+    return state
+}
+
 function pull_ok(old, {text}) {
     const editorContentState = ContentState.createFromText(text)
     const editorState = EditorState.createWithContent(editorContentState)
@@ -84,6 +93,7 @@ function push_err(old, {info}) {
 }
 
 export const reducer = createReducers({
+    [CREATE_DEFAULT]: create_default,
     [UPDATE_EDITOR]: update_editor,
     [PULL_OK]: pull_ok,
     [PULL_ERR]: pull_err,

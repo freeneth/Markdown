@@ -15,7 +15,8 @@ const ContentDiv = styled.div`
     line-height: 1.5;
     p, blockquote, ul, ol, dl, pre {
         margin-top: 0;
-        margin-bottom: 16px
+        margin-bottom: 16px;
+        overflow: auto
     }
     h1 {
         padding-bottom: 0.3em;

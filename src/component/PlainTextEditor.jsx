@@ -48,4 +48,5 @@ PlainTextEditor.styles = {
     cursor: 'text',
     padding: '1em',
     overflowY: 'auto',
+    fontFamily: 'monospace',
 }

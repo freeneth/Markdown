@@ -19,7 +19,7 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
     const { externalCmd: { saveFile, saveFileList, loadFile, loadFileList,setShare, getShare }} = ownProps
     const FileIOCmd = {
         pull: (id) => {
-            dispatch(Action.file.cmd.pull(id, loadFile, saveFile))
+            dispatch(Action.file.cmd.pull(id, loadFile))
         },
         push: (id, remove) => {
             dispatch(Action.file.cmd.push(id, saveFile, remove))
@@ -58,6 +58,9 @@ const mapDispatchToProps = (dispatch, ownProps) =>{
         },
     }
     return {
+        createDefaultEditor: ()=>{
+            dispatch(Action.file.createDefault())
+        },
         updateEditor: (editor)=>{
             dispatch(Action.file.updateEditor(editor))
         },

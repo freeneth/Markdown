@@ -9,6 +9,7 @@ import {VLayout, HLayout} from './Layout.jsx'
 import EditorController from './EditorController.jsx'
 /* eslint-enable */
 import {m} from '../style.js'
+import PropTypes from 'prop-types'
 
 export default class CommonmarkEditor extends React.Component {
     constructor(props) {
@@ -23,15 +24,13 @@ export default class CommonmarkEditor extends React.Component {
     componentDidMount() {
         const ioCmd = this.props.FileListIOCmd
         ioCmd.pull()
-        //console.log('commonmarkEditor componentDidMount')
     }
 
     componentWillReceiveProps(nextProps) {
-        const { FileListIOCmd, fileList } = this.props
+        const { FileListIOCmd, fileList} = this.props
         if (!fileList.equals(nextProps.fileList)) {
             FileListIOCmd.push()
         }
-        //console.log('componentWillReceiveProps')
     }
 
     toggleShowEditor(){
@@ -39,7 +38,18 @@ export default class CommonmarkEditor extends React.Component {
     }
 
     render() {
-        const { file, syncState, fileList, updateFileListState, updateEditor, FileIOCmd, fileShare, FileShareIOCmd, FileShareCmd } = this.props
+        const {
+            file,
+            syncState,
+            fileList,
+            updateFileListState,
+            updateEditor,
+            createDefaultEditor,
+            FileIOCmd,
+            fileShare,
+            FileShareIOCmd,
+            FileShareCmd,
+        } = this.props
         const styles = CommonmarkEditor.styles
         const markdown = file.editor.getCurrentContent().getPlainText()
         const fileid = fileList.selectedFile
@@ -70,6 +80,8 @@ export default class CommonmarkEditor extends React.Component {
                             fileList={fileList}
                             FileIOCmd={FileIOCmd}
                             updateEditor={updateEditor}
+                            updateFileListState={updateFileListState}
+                            createDefaultEditor={createDefaultEditor}
                             styles={m(styles.editor, editorDisplay)}
                         />
                         <CommonmarkRenderer
@@ -81,6 +93,18 @@ export default class CommonmarkEditor extends React.Component {
             </HLayout>
         </div>)
     }
+}
+
+CommonmarkEditor.propTypes = {
+    file: PropTypes.object.isRequired,
+    fileList: PropTypes.object.isRequired,
+    syncState: PropTypes.object.isRequired,
+    fileShare: PropTypes.object.isRequired,
+    updateFileListState: PropTypes.func.isRequired,
+    updateEditor: PropTypes.func.isRequired,
+    FileIOCmd: PropTypes.object.isRequired,
+    FileShareCmd: PropTypes.object.isRequired,
+    FileShareIOCmd: PropTypes.object.isRequired,
 }
 
 CommonmarkEditor.styles = {

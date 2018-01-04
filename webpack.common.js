@@ -14,6 +14,10 @@ module.exports = {
                 ],
             },
             {
+                test: /.raw$/,
+                use: 'raw-loader',
+            },
+            {
                 test: /\.(png|jpg|gif)$/,
                 use: 'url-loader',
             },

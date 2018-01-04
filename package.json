@@ -21,6 +21,7 @@
     "draft-js": "^0.10.4",
     "immutable": "^4.0.0-rc.9",
     "prop-types": "^15.6.0",
+    "raw-loader": "^0.5.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-modal2": "^5.0.0",
