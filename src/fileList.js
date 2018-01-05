@@ -51,8 +51,7 @@ function update_fileListState(old, { fileListState }) {
 }
 
 function pull_ok(old, { json }) {
-    const fileListState = old.fromJSON(json)
-    return fileListState
+    return FileListState.fromJSON(json)
 }
 
 function pull_err(old, { info }) {

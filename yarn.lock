@@ -3166,7 +3166,7 @@ react-redux@^5.0.6:
 
 "react-simple-file-list@git+ssh://gitrepo@gen8.dev:ES6scriptProjects/react-simple-file-list#release":
   version "0.0.1"
-  resolved "git+ssh://gitrepo@gen8.dev:ES6scriptProjects/react-simple-file-list#ac8c0fc3fbc8aa196caa83cf2073fb189084a681"
+  resolved "git+ssh://gitrepo@gen8.dev:ES6scriptProjects/react-simple-file-list#39d300e6be99e561fbd80ad69f7fc1112c92d99c"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
