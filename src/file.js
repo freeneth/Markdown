@@ -109,9 +109,7 @@ function* pull({ id, loader}) {
     const onOk = function*(workid, json) {
         if (json) {
             const text = parseV1(json)
-            if (text) {
-                yield put(actions.pull_ok(text))
-            }
+            yield put(actions.pull_ok(text))
         } else {
             yield put(actions.pull_ok(''))
         }
