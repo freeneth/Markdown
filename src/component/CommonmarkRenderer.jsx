@@ -80,7 +80,8 @@ const ContentDiv = styled.div`
         margin-bottom: 0
     }
     li {
-        word-wrap: break-all
+        word-wrap: break-word;
+        list-style: inherit
     }
     li>p {
         margin-top: 16px
