@@ -24,6 +24,7 @@ export default {
         }),
     ],
     external: [
+        'babel-polyfill',
         'immutable',
         'react',
         'react-dom',

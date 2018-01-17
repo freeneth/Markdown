@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "commonmark": "^0.28.1",
     "css-loader": "^0.28.7",
     "immutable": "^4.0.0-rc.9",

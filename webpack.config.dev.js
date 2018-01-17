@@ -5,7 +5,7 @@ const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
     entry: {
-        app: path.resolve('./src/app.jsx'),
+        app: ['babel-polyfill', path.resolve('./src/app.jsx')],
         //test: path.resolve('./src/test_store.js'),
     },
     output: {
