@@ -1,6 +1,7 @@
-import resolve from 'rollup-plugin-node-resolve';
+import string from 'rollup-plugin-string'
+import resolve from 'rollup-plugin-node-resolve'
 import cjs from 'rollup-plugin-commonjs'
-import babel from 'rollup-plugin-babel';
+import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
 
 export default {
@@ -10,6 +11,9 @@ export default {
         format: 'es',
     },
     plugins: [
+        string({
+            include: 'src/*.raw',
+        }),
         babel({
             exclude: 'node_modules/**',
         }),

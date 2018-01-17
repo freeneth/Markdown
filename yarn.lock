@@ -3519,6 +3519,12 @@ rollup-plugin-replace@^2.0.0:
     minimatch "^3.0.2"
     rollup-pluginutils "^2.0.1"
 
+rollup-plugin-string@^2.0.2:
+  version "2.0.2"
+  resolved "http://registry.npm.taobao.org/rollup-plugin-string/download/rollup-plugin-string-2.0.2.tgz#f5323a22cfd738b450cbea62ab6593705eac744b"
+  dependencies:
+    rollup-pluginutils "^1.5.0"
+
 rollup-pluginutils@^1.5.0:
   version "1.5.2"
   resolved "http://registry.npm.taobao.org/rollup-pluginutils/download/rollup-pluginutils-1.5.2.tgz#1e156e778f94b7255bfa1b3d0178be8f5c552408"
