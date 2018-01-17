@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { Action } from './store.js'
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import ShareCommonmark from './component/ShareCommonmark.jsx'
