@@ -12,21 +12,23 @@ const DIV = styled.div`
 
 const BUTTON = styled.div`
     position: absolute;
-    top: 0;
-    width: 2em;
+    top: 0.65em;
+    width: 1.1em;
     height: 2em;
     text-align: center;
     cursor: pointer;
     user-select: none;
-    background-color: rgba(128, 128, 128, 0.5);
+    background-color: rgba(0, 160, 233, 0.7);
     color: #ffdcea;
-    border-radius: 5px;
+    border-radius: 10px 0 0 10px;
 `
 
 const BUTTONO = styled(BUTTON)`
+    border-radius: 0 10px 10px 0;
     left: 0;
 `
 const BUTTONC = styled(BUTTON)`
+    border-radius: 10px 0 0 10px;
     right: 0;
 `
 /* eslint-enable */
