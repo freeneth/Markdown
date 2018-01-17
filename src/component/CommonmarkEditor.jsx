@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
-import PlainTextEditor from './PlainTextEditor.jsx'
+import Plain from 'slate-plain-serializer'
 import CommonmarkRenderer from './CommonmarkRenderer.jsx'
 import Toolbar from './Toolbar.jsx'
 import Sidebar from './Sidebar.jsx'
@@ -51,7 +51,7 @@ export default class CommonmarkEditor extends React.Component {
             FileShareCmd,
         } = this.props
         const styles = CommonmarkEditor.styles
-        const markdown = file.editor.getCurrentContent().getPlainText()
+        const markdown = Plain.serialize(file.editor)
         const fileid = fileList.selectedFile
 
         const editorDisplay = {display: this.state.showEditor ? 'block' :'none' }

@@ -1,7 +1,8 @@
-import { ContentState, EditorState } from 'draft-js'
 import {createReducers} from './redux_helper.js'
 import { takeLatest, put, select } from 'redux-saga/effects'
 import SyncState from 'redux-sync-state'
+import { Value } from 'slate'
+import Plain from 'slate-plain-serializer'
 
 const PULL = 'FILE/PULL'
 const PUSH = 'FILE/PUSH'
@@ -16,7 +17,18 @@ const PUSH_ERR = 'FILE/PUSH_ERR'
 
 export function defaultValue() {
     return {
-        editor: EditorState.createEmpty(),
+        editor: Value.fromJSON({
+            document: {
+                nodes: [{
+                    object: 'block',
+                    type: 'paragraph',
+                    nodes: [{
+                        object: 'text',
+                        leaves: [{ text: '' }],
+                    }],
+                }],
+            },
+        }),
     }
 }
 
@@ -65,16 +77,14 @@ function update_editor(old, {editor}) {
 function create_default(old) {
     const defaultText = require('./defaultText.raw')
 
-    const editorContentState = ContentState.createFromText(defaultText)
-    const editorState = EditorState.createWithContent(editorContentState)
-    const state = Object.assign({}, old, {editor: editorState})
+    const defaultValue = Plain.deserialize(defaultText)
+    const state = Object.assign({}, old, {editor: defaultValue})
     return state
 }
 
 function pull_ok(old, {text}) {
-    const editorContentState = ContentState.createFromText(text)
-    const editorState = EditorState.createWithContent(editorContentState)
-    const state = Object.assign({}, old, {editor: editorState})
+    const defaultValue = Plain.deserialize(text)
+    const state = Object.assign({}, old, {editor: defaultValue})
     return state
 }
 
@@ -123,7 +133,7 @@ function* pull({ id, loader}) {
 function* push({id, saver, remove}) {
     const getFile = state => (state.file)
     let file = yield select(getFile)
-    const text = file.editor.getCurrentContent().getPlainText()
+    const text = Plain.serialize(file.editor)
     file = yield select(getFile)
 
     const start = (workid) => {

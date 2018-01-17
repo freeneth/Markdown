@@ -2,6 +2,7 @@
 import React from 'react'
 import PlainTextEditor from './PlainTextEditor.jsx'
 /* eslint-enable */
+import Plain from 'slate-plain-serializer'
 import Random from '../random.js'
 
 
@@ -39,16 +40,16 @@ export default class EditorController extends React.Component {
 
     componentDidUpdate(prevProps) {
         const {  fileid, FileIOCmd } = this.props
-        const oldText = prevProps.file.editor.getCurrentContent().getPlainText()
-        const newText = this.props.file.editor.getCurrentContent().getPlainText()
+        const oldText = Plain.serialize(prevProps.file.editor)
+        const newText = Plain.serialize(this.props.file.editor)
         if (oldText !== newText) {
             FileIOCmd.push(fileid)
         }
     }
 
-    onChange(editorState) {
+    onChange({value}) {
         const { updateEditor } = this.props
-        updateEditor(editorState)
+        updateEditor(value)
     }
 
     render() {

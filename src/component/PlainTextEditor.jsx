@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
-import { Editor} from 'draft-js'
+import { Editor} from 'slate-react'
 /* eslint-enable */
 import { m } from '../style.js'
 
@@ -33,9 +33,9 @@ export default class PlainTextEditor extends React.Component {
                 onClick={this.focus.bind(this)}
             >
                 <Editor
-                    editorState={state}
+                    value={state}
+                    placeholder='在这里输入内容...'
                     onChange={onChange}
-                    placeholder="在这里输入..."
                     ref={this.setDomEditorRef.bind(this)}
                 />
             </div>

@@ -11,8 +11,6 @@ import { createLogger } from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
 import Immutable from 'immutable'
 
-import 'draft-js/dist/Draft.css'
-
 // callbacks: {
 //     saveFile: (id, json)=>Promise()
 //     saveFileList: (json)=>Promise()
