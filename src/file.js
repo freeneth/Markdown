@@ -3,6 +3,7 @@ import { takeLatest, put, select } from 'redux-saga/effects'
 import SyncState from 'redux-sync-state'
 import { Value } from 'slate'
 import Plain from 'slate-plain-serializer'
+import defaultText from './defaultText.raw'
 
 const PULL = 'FILE/PULL'
 const PUSH = 'FILE/PUSH'
@@ -75,8 +76,6 @@ function update_editor(old, {editor}) {
 }
 
 function create_default(old) {
-    const defaultText = require('./defaultText.raw')
-
     const defaultValue = Plain.deserialize(defaultText)
     const state = Object.assign({}, old, {editor: defaultValue})
     return state
