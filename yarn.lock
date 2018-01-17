@@ -377,6 +377,13 @@ babel-plugin-check-es2015-constants@^6.22.0:
   dependencies:
     babel-runtime "^6.22.0"
 
+babel-plugin-styled-components@^1.4.0:
+  version "1.4.0"
+  resolved "http://registry.npm.taobao.org/babel-plugin-styled-components/download/babel-plugin-styled-components-1.4.0.tgz#3a2207a1852770a383f0106ca85aded4f3e3488f"
+  dependencies:
+    babel-types "^6.26.0"
+    stylis "^3.0.0"
+
 babel-plugin-syntax-async-functions@^6.8.0:
   version "6.13.0"
   resolved "http://registry.npm.taobao.org/babel-plugin-syntax-async-functions/download/babel-plugin-syntax-async-functions-6.13.0.tgz#cad9cad1191b5ad634bf30ae0872391e0647be95"
@@ -3652,6 +3659,10 @@ styled-components@^2.3.3, styled-components@^2.4.0:
     prop-types "^15.5.4"
     stylis "^3.4.0"
     supports-color "^3.2.3"
+
+stylis@^3.0.0:
+  version "3.4.8"
+  resolved "http://registry.npm.taobao.org/stylis/download/stylis-3.4.8.tgz#94380babbcd4c75726215794ca985b38ec96d1a3"
 
 stylis@^3.4.0:
   version "3.4.5"

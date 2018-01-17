@@ -3,5 +3,5 @@
         ["env", {
             "modules": false,
         }], "react"],
-    "plugins": ["transform-runtime", "transform-object-rest-spread"],
+    "plugins": ["babel-plugin-styled-components", "transform-runtime", "transform-object-rest-spread"],
 }
