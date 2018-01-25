@@ -67,7 +67,7 @@ export default class ShareDialog extends PureComponent {
         } else {
             shareSwtch = <div style={ShareDialog.styles.disableButton}>处理中...</div>
         }
-        const shareUrl = fileShare.syncing ? '处理中...' : 'http://' + url + '/#!/app/edshare/' + fileShare.shareidList[0]
+        const shareUrl = fileShare.syncing ? '处理中...' : 'http://' + url + '/#!/share/editor/' + fileShare.shareidList[0]
 
         let inputdiv = (<div style={ShareDialog.styles.inputdiv} >
             <input type="text" style={m(ShareDialog.styles.input, ShareDialog.styles.disableStyle)} readOnly="readonly" autoComplete="off" value={shareUrl} />
