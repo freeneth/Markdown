@@ -10,6 +10,7 @@ export default class ShareCommonmark extends React.Component {
             markdown: '',
         }
     }
+
     componentDidMount() {
         this.props.loadShareFile().then(file=>{
             console.log(file)

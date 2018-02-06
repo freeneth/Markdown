@@ -5,12 +5,10 @@ import { createStore, applyMiddleware} from 'redux'
 import React from 'react'
 import { Provider } from 'react-redux'
 import ConnectedCommonmarkEditor from './ConnectedCommonmarkEditor.jsx'
-import ConnectedShareCommonmark from './ConnectedShareCommonmark.jsx'
 /* eslint-enable */
 import { Reducer, Saga } from './store.js'
 import { createLogger } from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
-import Immutable from 'immutable'
 
 // callbacks: {
 //     saveFile: (id, json)=>Promise()
@@ -24,19 +22,6 @@ import Immutable from 'immutable'
 export default function initCommonMark(element, callbacks, readonly=false) {
     const logger = createLogger({
         duration: true,
-        stateTransformer: (state)=>{
-            let newState = {}
-
-            for (var i of Object.keys(state)) {
-                if (Immutable.Iterable.isIterable(state[i])) {
-                    newState[i] = state[i].toJS()
-                } else {
-                    newState[i] = state[i]
-                }
-            }
-
-            return newState
-        },
     })
     const sagaMiddleware = createSagaMiddleware()
 
@@ -75,19 +60,6 @@ export default function initCommonMark(element, callbacks, readonly=false) {
     render(<Provider store={store}>
         <ConnectedCommonmarkEditor readonly={readonly} externalCmd={externalCmd}></ConnectedCommonmarkEditor>
     </Provider>, element)
-}
-
-// callbacks: {
-//     getFileid: ()=>Promise(fileid)
-//     loadShareFile: (id)=>Promise(json)
-// }
-export function initShareCommonMark(element, callbacks) {
-    console.assert(callbacks.loadShareFile, 'need loadShareFile')
-    console.assert(callbacks.getFileid, 'need getFileid')
-    const { loadShareFile, getFileid } = callbacks
-    const externalCmd = { loadShareFile, getFileid }
-
-    render(<ConnectedShareCommonmark externalCmd={externalCmd}></ConnectedShareCommonmark>, element)
 }
 
 export function deinit(element) {

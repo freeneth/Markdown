@@ -2,7 +2,7 @@ import 'babel-polyfill'
 import { render, unmountComponentAtNode } from 'react-dom'
 /* eslint-disable no-unused-vars */
 import React from 'react'
-import ConnectedShareCommonmark from './ConnectedShareCommonmark.jsx'
+import ShareCommonmark from './component/ShareCommonmark.jsx'
 /* eslint-enable */
 
 // callbacks: {
@@ -11,11 +11,9 @@ import ConnectedShareCommonmark from './ConnectedShareCommonmark.jsx'
 // }
 export function initShareCommonMark(element, callbacks) {
     console.assert(callbacks.loadShareFile, 'need loadShareFile')
-    console.assert(callbacks.getFileid, 'need getFileid')
-    const { loadShareFile, getFileid } = callbacks
-    const externalCmd = { loadShareFile, getFileid }
+    const { loadShareFile} = callbacks
 
-    render(<ConnectedShareCommonmark externalCmd={externalCmd}></ConnectedShareCommonmark>, element)
+    render(<ShareCommonmark loadShareFile={loadShareFile}/>, element)
 }
 
 export function deinit(element) {
