@@ -29,12 +29,15 @@
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
     "redux-sync-state": "git+ssh://gitrepo@gen8.dev:ES6scriptProjects/redux-sync-state.git#release",
-    "slate": "^0.32.1",
-    "slate-plain-serializer": "^0.5.1",
-    "slate-react": "^0.11.1",
-    "styled-components": "^2.4.0"
+    "slate": "^0.33.4",
+    "slate-plain-serializer": "^0.5.10",
+    "slate-react": "^0.12.4"
+  },
+  "peerDependencies": {
+    "styled-components": "^3.2.0"
   },
   "devDependencies": {
+    "styled-components": "^3.2.0",
     "babel-cli": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-external-helpers": "^6.22.0",
