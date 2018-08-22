@@ -1,4 +1,3 @@
-import 'babel-polyfill'
 import { render, unmountComponentAtNode } from 'react-dom'
 import { createStore, applyMiddleware} from 'redux'
 /* eslint-disable no-unused-vars */
